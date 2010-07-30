@@ -1,6 +1,6 @@
 package com.jklas.search.index.berkeley;
 
-import com.jklas.search.index.IndexWriter;
+import com.jklas.search.index.MasterAndInvertedIndexWriter;
 import com.jklas.search.index.IndexWriterFactory;
 
 public class BerkeleyIndexWriterFactory implements IndexWriterFactory {
@@ -12,7 +12,7 @@ public class BerkeleyIndexWriterFactory implements IndexWriterFactory {
 	}
 
 	@Override
-	public IndexWriter getIndexWriter() {
+	public MasterAndInvertedIndexWriter getIndexWriter() {
 		return new BerkeleyIndexWriter();
 	}
 

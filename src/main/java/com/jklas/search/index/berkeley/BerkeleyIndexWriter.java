@@ -1,13 +1,12 @@
 package com.jklas.search.index.berkeley;
 
 import com.jklas.search.index.IndexId;
-import com.jklas.search.index.IndexWriter;
+import com.jklas.search.index.MasterAndInvertedIndexWriter;
 import com.jklas.search.index.ObjectKey;
 import com.jklas.search.index.PostingMetadata;
 import com.jklas.search.index.Term;
-import com.jklas.search.index.dto.IndexObjectDto;
 
-public class BerkeleyIndexWriter implements IndexWriter {
+public class BerkeleyIndexWriter implements MasterAndInvertedIndexWriter {
 
 	private IndexWriterState state;
 
@@ -27,10 +26,10 @@ public class BerkeleyIndexWriter implements IndexWriter {
 	}
 
 	@Override
-	public void openDeleteAndClose(IndexObjectDto indexObjectDto) {
-		state.handleOpen(this, indexObjectDto.getIndexId());
+	public void openDeleteAndClose(IndexId indexId, ObjectKey objectKey) {
+		state.handleOpen(this, indexId);
 		try {
-			state.handleDelete(this, new ObjectKey(indexObjectDto.getClass(), indexObjectDto.getId()));
+			state.handleDelete(this, objectKey);
 		} finally {
 			state.handleClose(this);
 		}
@@ -100,8 +99,8 @@ public class BerkeleyIndexWriter implements IndexWriter {
 	}
 
 	@Override
-	public void delete(IndexObjectDto indexObjectDto) {
-		state.handleDelete(this, new ObjectKey(indexObjectDto.getClass(), indexObjectDto.getId()));
+	public void delete(ObjectKey objectKey) {
+		state.handleDelete(this, objectKey);
 	}
 
 }

@@ -302,7 +302,7 @@ public class BerkeleyDbIndexTest {
 	public void testIndexWriterAndReaderFactories() {
 		ObjectKey key = new ObjectKey(Customer.class,new Integer(0));
 
-		IndexWriter indexWriter = BerkeleyIndexWriterFactory.getInstance().getIndexWriter();		
+		MasterAndInvertedIndexWriter indexWriter = BerkeleyIndexWriterFactory.getInstance().getIndexWriter();		
 		indexWriter.open();
 		indexWriter.write(new Term("JULI"), key, PostingMetadata.NULL);
 		indexWriter.close();
