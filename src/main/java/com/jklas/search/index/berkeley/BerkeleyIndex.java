@@ -74,11 +74,12 @@ public class BerkeleyIndex implements MasterAndInvertedIndex {
 		} else {
 			if(!thisIndexInit) {			
 				DatabaseConfig dbConfig = new DatabaseConfig();
-				dbConfig.setTransactional(true);
+				dbConfig.setTransactional(new BerkeleyGlobalPropertyEditor().isTransactional());
 				dbConfig.setAllowCreate(true);
 				
 				invertedIndexDb = env.openDatabase(null, THIS_INDEX_PREFIX + ".INV." + indexId.getIndexName(), dbConfig);		        
 				masterRegistryDb = env.openDatabase(null, THIS_INDEX_PREFIX + ".MST." + indexId.getIndexName(), dbConfig);
+				
 				
 				EntryBinding<ObjectKey> masterKeyBinding = new SerialBinding<ObjectKey>(javaCatalog, ObjectKey.class);
 				EntryBinding<MasterRegistryEntry> masterValueBinding = new SerialBinding<MasterRegistryEntry>(javaCatalog, MasterRegistryEntry.class);
@@ -98,10 +99,13 @@ public class BerkeleyIndex implements MasterAndInvertedIndex {
 
 	private synchronized static void checkGlobalInit() {
 		if(!globalInit) {
+			BerkeleyGlobalPropertyEditor berkeleyGlobalPropertyEditor = new BerkeleyGlobalPropertyEditor();
+			
 			EnvironmentConfig envConfig = new EnvironmentConfig();
 			envConfig.setTransactional(true);
 			envConfig.setAllowCreate(true);
-			env = new Environment(new File(new BerkeleyGlobalPropertyEditor().getBaseDir()), envConfig);
+			
+			env = new Environment(new File(berkeleyGlobalPropertyEditor.getBaseDir()), envConfig);
 
 			DatabaseConfig dbConfig = new DatabaseConfig();
 			dbConfig.setTransactional(true);
